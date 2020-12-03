@@ -1,13 +1,26 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/mamoralesMELI/go-hands-on/rest"
+)
+
+type Greeting struct {
+	greeting string `json:"greeting"`
+	owner string `json:"owner"`
+	repository string `json:"repository"`
+}
 
 func main() {
 	r := gin.Default()
 	r.GET("/mygreeting",addCors, func(c *gin.Context){
+		r := rest.New()
+		g := new(Greeting)
+		r.Get("https://fanaur-workshop-go-hands-on.herokuapp.com/fanaur",nil, g)
+
 		c.JSON(200, gin.H{
 			"owner": "Martín Morales",
-			"greeting": "Hola, trabajo como dev en el equipo de reporting. Testing length: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+			"greeting": g.greeting,
 			"repository": "https://github.com/mamoralesMELI/go-hands-on",
 		})
 	})
